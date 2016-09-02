@@ -16,6 +16,11 @@
   tags:
     - openvpn
 
+- include: Debian.yml
+  when: ansible_distribution == "Debian"
+  tags:
+    - openvpn
+
 - name: Create OpenVPN defaults configuration file
   become: yes
   template:

@@ -16,9 +16,14 @@
   tags:
     - easy_rsa
 
+- include: Debian.yml
+  when: ansible_distribution == "Debian"
+  tags:
+    - easy_rsa
+
 - name: Create CA directory
   become: yes
-  command: make-cadir {{ easy_rsa_ca_dir }}
+  command: mkdir {{ easy_rsa_ca_dir }}
   args:
     creates: "{{ easy_rsa_ca_dir }}"
   tags:
@@ -34,6 +39,12 @@
     state: directory
   tags:
     - easy_rsa
+
+- name: Copy whichopensslcnf and others
+  become: yes
+  shell: "cp /usr/share/easy-rsa/* {{ easy_rsa_ca_dir }}"
+  args:
+    creates: "{{ easy_rsa_ca_dir }}/whichopensslcnf"
 
 - name: Create vars configuration file
   become: yes
