@@ -21,6 +21,20 @@
     dest: /etc/sysctl.conf
     regexp: "#net.ipv4.ip_forward=1"
     line: "net.ipv4.ip_forward=1"
+  become: yes
 
 
 - shell: sysctl -p
+  become: yes
+
+#Iptables configuration
+- copy:
+    src: iptables
+    dest: /root/iptables
+  become: yes
+
+- lineinfile:
+    dest: /etc/rc.local
+    line: iptables-restore < /root/iptables 2> /root/log
+    insertbefore: "^exit 0"
+  become: yes

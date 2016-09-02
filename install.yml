@@ -3,4 +3,5 @@
     openvpn_server: true
     openvpn_redirect_gateway: true
   roles:
+    - rpi-network-conf
     - kbrebanov.openvpn
