@@ -1,0 +1,6 @@
+- hosts: all
+  vars:
+    openvpn_server: true
+    openvpn_redirect_gateway: true
+  roles:
+    - kbrebanov.openvpn
