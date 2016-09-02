@@ -1,0 +1,26 @@
+---
+- name: insert/update eth0 configuration for static ip in /etc/dhcpcd.conf
+  blockinfile:
+    dest: /etc/dhcpcd.conf
+    block: |
+        interface eth0
+        static ip_address=192.168.1.10/24
+        static routers=192.168.1.1
+        static domain_name_servers=192.168.1.1
+  become: yes
+
+- copy:
+    src: afraid-ddns
+    dest: /etc/cron.hourly/afraid-ddns
+    mode: 755
+  become: yes
+
+
+# Following: http://readwrite.com/2014/04/10/raspberry-pi-vpn-tutorial-server-secure-web-browsing/
+- lineinfile:
+    dest: /etc/sysctl.conf
+    regexp: "#net.ipv4.ip_forward=1"
+    line: "net.ipv4.ip_forward=1"
+
+
+- shell: sysctl -p
