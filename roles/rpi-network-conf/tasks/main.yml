@@ -19,13 +19,16 @@
 # Following: http://readwrite.com/2014/04/10/raspberry-pi-vpn-tutorial-server-secure-web-browsing/
 - lineinfile:
     dest: /etc/sysctl.conf
-    regexp: "#net.ipv4.ip_forward=1"
+    regexp: "^#net.ipv4.ip_forward=1"
     line: "net.ipv4.ip_forward=1"
+    backrefs: yes
+  register: ip_forward_set
   become: yes
 
 
 - shell: sysctl -p
   become: yes
+  when: ip_forward_set.changed
 
 #Iptables configuration
 - copy:
