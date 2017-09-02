@@ -9,12 +9,31 @@
         static domain_name_servers=192.168.1.1
   become: yes
 
-- copy:
+- name: Set cron job to update dynamic dns
+  copy:
     src: afraid-ddns
     dest: /etc/cron.hourly/afraid-ddns
     mode: 755
   become: yes
 
+- name: Install fail2ban
+  become: yes
+  apt:
+    name: fail2ban
+
+- name: Configure fail2ban
+  become: yes
+  copy:
+    src: sshd.conf
+    dest: /etc/fail2ban/jail.d/sshd.conf
+  register: fail2ban_configured
+
+- name: Restart fail2ban
+  become: yes
+  service:
+    name: fail2ban
+    state: restarted
+  when: fail2ban_configured.changed
 
 # Following: http://readwrite.com/2014/04/10/raspberry-pi-vpn-tutorial-server-secure-web-browsing/
 - lineinfile:
