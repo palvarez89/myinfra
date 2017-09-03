@@ -14,4 +14,4 @@ galaxy_info:
   galaxy_tags:
   - networking
 dependencies:
-  - { role: kbrebanov.easy_rsa, when: openvpn_server and not openvpn_static }
+  - { role: palvarez89.easy_rsa3, when: openvpn_server and not openvpn_static }
