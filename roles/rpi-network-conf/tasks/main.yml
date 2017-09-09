@@ -44,19 +44,28 @@
   register: ip_forward_set
   become: yes
 
-
 - shell: sysctl -p
   become: yes
   when: ip_forward_set.changed
 
-#Iptables configuration
-- copy:
-    src: iptables
-    dest: /root/iptables
+# Iptables configuration
+# Following: https://www.raspberrypi.org/forums/viewtopic.php?f=36&t=70594
+- name: Install script to set firewall rules
   become: yes
+  copy:
+    src: firewall.sh
+    dest: /usr/local/bin/firewall.sh
+    mode: 755
+  register: firewall_script_installed
 
-- lineinfile:
-    dest: /etc/rc.local
-    line: iptables-restore < /root/iptables 2> /root/log
-    insertbefore: "^exit 0"
+- name: Make firewall rules run every boot
   become: yes
+  lineinfile:
+    dest: /etc/rc.local
+    line: /usr/local/bin/firewall.sh
+    insertbefore: "^exit 0"
+
+- name: Set firewall rules
+  become: yes
+  shell: /usr/local/bin/firewall.sh
+  when: firewall_script_installed.changed
