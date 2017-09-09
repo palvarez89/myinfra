@@ -17,7 +17,7 @@ daemon
 {% endif %}
 dev {{ openvpn_dev }}
 {% if not openvpn_static %}
-dh dh{{ easy_rsa_key_size }}.pem
+dh dh.pem
 {% endif %}
 {% if openvpn_static %}
 ifconfig {{ openvpn_server_ifconfig }}
@@ -65,5 +65,5 @@ status {{ openvpn_status }}
 tls-server
 {% endif %}
 user {{ openvpn_user }}
-port 8010
-proto tcp
+port {{ openvpn_remote_port }}
+proto {{ openvpn_proto }}
