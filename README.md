@@ -6,7 +6,8 @@ To configure new users (once installed)
 Run the following command and following the instructions:
 
     cd /etc/easy-rsa/
-    sudo . ./vars ./build-key <keyname>
+    sudo ./easyrsa gen-req <keyname> nopass
+    sudo ./easyrsa sign-req client <keyname>
 
 will generate various files needed to configure OpenVPN:
 
