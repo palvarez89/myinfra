@@ -2,6 +2,9 @@
   vars:
     openvpn_server: true
     openvpn_redirect_gateway: true
+    openvpn_remote_port: 8010
+    openvpn_proto: tcp
+
   roles:
     - rpi-network-conf
     - kbrebanov.openvpn
