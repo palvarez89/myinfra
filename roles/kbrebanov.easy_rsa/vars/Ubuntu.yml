@@ -1,5 +1,0 @@
----
-# vars file for easy_rsa (Ubuntu specific)
-
-easy_rsa_packages:
-  - easy-rsa
