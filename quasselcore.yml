@@ -1,0 +1,5 @@
+- hosts: quas
+  remote_user: root
+  roles:
+  - { role: security, become: yes }
+  - { role: users, become: yes }

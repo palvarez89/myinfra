@@ -1,1 +1,4 @@
 raspberry  ansible_ssh_host=192.168.1.10 ansible_ssh_user=pi
+
+[quas]
+het.alvarezpiedehierro.com ansible_python_interpreter=/usr/bin/python3 node_hostname=het

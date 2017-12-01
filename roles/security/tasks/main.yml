@@ -1,0 +1,8 @@
+---
+- name: Install packages needed from apt
+  apt:
+    pkg: "{{ item }}"
+    state: present
+    update-cache: yes
+  with_items:
+  - fail2ban
