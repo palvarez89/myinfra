@@ -3,3 +3,4 @@
   roles:
   - { role: security, become: yes }
   - { role: users, become: yes }
+  - { role: quasselcore, become: yes }

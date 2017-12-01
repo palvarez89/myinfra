@@ -1,0 +1,4 @@
+---
+- name: install quassel-core
+  apt:
+    name: quassel-core
