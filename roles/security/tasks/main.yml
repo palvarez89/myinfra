@@ -6,3 +6,17 @@
     update-cache: yes
   with_items:
   - fail2ban
+
+- name: Remove fail2ban defaults file
+  file:
+    path: /etc/fail2ban/jail.d/defaults-debian.conf
+    state: absent
+  notify:
+  - restart fail2ban
+
+- name: Ban ssh attempts for 1h
+  copy:
+    src: sshd.conf
+    dest: /etc/fail2ban/jail.d/sshd.conf
+  notify:
+  - restart fail2ban
