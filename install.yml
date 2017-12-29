@@ -7,4 +7,4 @@
 
   roles:
     - rpi-network-conf
-    - kbrebanov.openvpn
+    - palvarez89.openvpn_raspbian
