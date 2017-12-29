@@ -1,4 +1,4 @@
-- hosts: all
+- hosts: raspberry
   vars:
     openvpn_server: true
     openvpn_redirect_gateway: true
