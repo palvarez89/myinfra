@@ -1,4 +1,0 @@
-#!/bin/sh
-#
-PATH=/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/sbin:/usr/local/bin
-wget --no-check-certificate -O - https://freedns.afraid.org/dynamic/update.php?VVVNY1JLMzFVMVVBQU5PTEhCVUFBQUF6OjExODM4NzY3 >> /tmp/freedns_pedro-badajoz_mooo_com.log 2>&1 &

@@ -9,10 +9,17 @@
         static domain_name_servers=192.168.1.1
   become: yes
 
-- name: Set cron job to update dynamic dns
-  copy:
+- name: Set cron job to update dynamic dns afraid
+  template:
     src: afraid-ddns
     dest: /etc/cron.hourly/afraid-ddns
+    mode: 755
+  become: yes
+
+- name: Set cron job to update dynamic dns godaddy
+  template:
+    src: godaddy-ddns
+    dest: /etc/cron.hourly/godaddy-ddns
     mode: 755
   become: yes
 
