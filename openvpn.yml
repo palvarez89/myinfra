@@ -6,5 +6,7 @@
     openvpn_proto: tcp
 
   roles:
-    - rpi-network-conf
-    - palvarez89.openvpn_raspbian
+  - { role: security, become: yes }
+  - { role: users, become: yes }
+  - rpi-network-conf
+  - palvarez89.openvpn_raspbian

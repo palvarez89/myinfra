@@ -1,5 +1,3 @@
-Disable ssh by password (TODO)
-
 To configure new users (once installed)
 ---------------------------------------
 
