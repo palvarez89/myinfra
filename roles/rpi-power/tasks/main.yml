@@ -1,0 +1,7 @@
+---
+- name: Increase current on usb ports
+  lineinfile:
+    dest: /boot/config.txt
+    regexp: "max_usb_current*"
+    line: "max_usb_current=1"
+  become: yes

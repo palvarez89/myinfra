@@ -9,4 +9,5 @@
   - { role: security, become: yes }
   - { role: users, become: yes }
   - rpi-network-conf
+  - rpi-power
   - palvarez89.openvpn_raspbian
