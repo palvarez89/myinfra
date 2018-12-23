@@ -1,3 +1,8 @@
 - hosts: webservers
+  vars:
+    apache_remove_default_vhost: true
+    ES_FQDN: paparajotesybellotas.com
+    FQDN:
+    - "{{ ES_FQDN }}"
   roles:
-          - { role: geerlingguy.apache, become: yes }
+  - { role: paparajotesybellotas, become: yes }

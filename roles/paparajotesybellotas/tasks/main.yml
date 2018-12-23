@@ -1,28 +1,29 @@
 - set_fact:
-    echaloasuerte_root: "/var/www/echaloasuerte"
+    papybell_root: "/var/www/papybell"
 - set_fact:
-    echaloasuerte_app: "{{ echaloasuerte_root }}/web-app"
-    echaloasuerte_venv: "{{ echaloasuerte_root }}/venv"
-    echaloasuerte_static: "{{ echaloasuerte_root }}/static"
-    echaloasuerte_logs: "/var/log/echaloasuerte"
+    papybell_app: "{{ papybell_root }}/web-app"
+    papybell_venv: "{{ papybell_root }}/venv"
+    papybell_static: "{{ papybell_root }}/static"
+    papybell_logs: "/var/log/papybell"
+    papybell_django_settings: "config.settings.production"
 
-- name: Create echaloasuerte application tree
+- name: Create papybell application tree
   file:
     path: "{{ item }}"
     state: directory
     owner: www-data
     recurse: yes
   with_items:
-  - "{{ echaloasuerte_root }}"
-  - "{{ echaloasuerte_static }}"
-  - "{{ echaloasuerte_app }}"
-  - "{{ echaloasuerte_venv }}"
-  - "{{ echaloasuerte_logs }}"
+  - "{{ papybell_root }}"
+  - "{{ papybell_static }}"
+  - "{{ papybell_app }}"
+  - "{{ papybell_venv }}"
+  - "{{ papybell_logs }}"
 
-- name: Clone/update repository in {{ echaloasuerte_app }}
+- name: Clone/update repository in {{ papybell_app }}
   git:
-    repo: git://github.com/etcaterva/EchaloASuerte.git
-    dest: "{{ echaloasuerte_app }}"
+    repo: git://github.com/palvarez89/paparajotesybellotas.git
+    dest: "{{ papybell_app }}"
     update: yes
     accept_hostkey: yes
     force: yes
@@ -31,71 +32,92 @@
 
 - name: Add xip.io to the ALLOWED_HOSTS list when TEST_DEPLOYMENT is defined
   lineinfile:
-    dest: "{{ echaloasuerte_app }}/echaloasuerte/settings/common.py"
+    dest: "{{ papybell_app }}/papybell/settings/common.py"
     regexp: "xip.io"
     insertafter: "^ALLOWED_HOSTS"
     line: "    '.xip.io',"
   when: TEST_DEPLOYMENT is defined
 
+- name: Install virtualenv from pip3
+  pip:
+    executable: pip3
+    name: virtualenv
+  become: yes
+
+- name: Manually create the initial virtualenv
+  command: virtualenv {{ papybell_venv }} -p python3
+  args:
+    creates: "{{ papybell_venv }}/bin/python3"
+  become: yes
+  become_user: www-data
+
 - name: Setup virtual environment for the app using requirements.txt
   pip:
-    requirements: "{{ echaloasuerte_app }}/requirements.txt"
-    virtualenv: "{{ echaloasuerte_venv }}"
+    requirements: "{{ papybell_app }}/requirements/production.txt"
+    virtualenv: "{{ papybell_venv }}"
+    virtualenv_python: python3
+  become: yes
+  become_user: www-data
 
-- name: Install python packages needed outside of the virtual environment
-  pip:
-    name: "{{ item }}"
-  with_items:
-  - pytz
-  - pymongo
-
-- name: Add virtualenv info in echaloasuerte.wsgi
+- name: Add virtualenv info in papybell.wsgi
   template:
-    src: echaloasuerte.wsgi
-    dest: "{{ echaloasuerte_app }}/echaloasuerte.wsgi"
+    src: papybell.wsgi
+    dest: "{{ papybell_app }}/papybell.wsgi"
   notify:
   - restart apache
 
-- name: Compile messages of django application
-  shell: |
-         {{ echaloasuerte_venv }}/bin/python {{ echaloasuerte_app }}/manage.py compilemessages
 
 - name: Synchronize django app database
   django_manage:
-    command: syncdb
-    app_path: "{{ echaloasuerte_app }}"
-    virtualenv: "{{ echaloasuerte_venv }}"
+    command: migrate
+    app_path: "{{ papybell_app }}"
+    virtualenv: "{{ papybell_venv }}"
+    settings: "{{ papybell_django_settings }}"
 
 - name: Collect statics files of django application
   django_manage:
     command: collectstatic
-    app_path: "{{ echaloasuerte_app }}"
-    virtualenv: "{{ echaloasuerte_venv }}"
+    app_path: "{{ papybell_app }}"
+    virtualenv: "{{ papybell_venv }}"
+    settings: "{{ papybell_django_settings }}"
 
-- name: Fix owners of echaloasuerte application tree
+- name: Fix owners of papybell application tree
   file:
     path: "{{ item }}"
     state: directory
     owner: www-data
     recurse: yes
   with_items:
-  - "{{ echaloasuerte_root }}"
-  - "{{ echaloasuerte_static }}"
-  - "{{ echaloasuerte_app }}"
-  - "{{ echaloasuerte_venv }}"
-  - "{{ echaloasuerte_logs }}"
+  - "{{ papybell_root }}"
+  - "{{ papybell_static }}"
+  - "{{ papybell_app }}"
+  - "{{ papybell_venv }}"
+  - "{{ papybell_logs }}"
 
-- name: Create the apache config file
-  template:
-    src: echaloasuerte.conf
-    dest: /etc/apache2/sites-available/echaloasuerte.conf
+- name: Install mod wsgi
+  apt:
+    name: libapache2-mod-wsgi-py3
+  become: yes
   notify:
   - restart apache
 
-- name: Enable apache site ecaheloasuerte
+- apache2_module:
+    state: present
+    name: wsgi
+  notify:
+  - restart apache
+
+- name: Create the apache config file
+  template:
+    src: papybell.conf
+    dest: /etc/apache2/sites-available/papybell.conf
+  notify:
+  - restart apache
+
+- name: Enable apache site paparajotesybellotas
   file:
-    src: ../sites-available/echaloasuerte.conf
-    dest: /etc/apache2/sites-enabled/echaloasuerte.conf
+    src: ../sites-available/papybell.conf
+    dest: /etc/apache2/sites-enabled/papybell.conf
     state: link
   notify:
   - restart apache
@@ -104,10 +126,3 @@
   service:
     name: apache2
     state: started
-
-- name: Purge cloudflare cache
-  shell: 'curl -X DELETE "https://api.cloudflare.com/client/v4/zones/{{item}}/purge_cache" -H "X-Auth-Email: mariocj89@gmail.com" -H "X-Auth-Key: {{cloudflare_api_token}}" --data "{\"purge_everything\":true}" -H "Content-Type: application/json"'
-  with_items:
-    - "{{cloudflare_echaloasuerte_id}}"
-    - "{{cloudflare_pickforme_id}}"
-    - "{{cloudflare_chooserandom_id}}"
