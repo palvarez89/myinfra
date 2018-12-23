@@ -1,2 +1,4 @@
 # Ansible Galaxy roles needed
 - src: palvarez89.openvpn_raspbian
+- src: geerlingguy.apache
+  version: 3.0.3
