@@ -1,3 +1,14 @@
+General
+=======
+
+Installing roles needed
+-----------------------
+
+    ansible-galaxy install -r requirements.yml -p roles/
+
+For OpenVPN
+===========
+
 To configure new users (once installed)
 ---------------------------------------
 
