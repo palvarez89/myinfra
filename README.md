@@ -6,6 +6,11 @@ Installing roles needed
 
     ansible-galaxy install -r requirements.yml -p roles/
 
+For paparajotes y bellotas
+==========================
+
+    ansible-playbook -i hosts wedsite.yml  -e ansible_user=pedroalvarez
+
 For OpenVPN
 ===========
 
