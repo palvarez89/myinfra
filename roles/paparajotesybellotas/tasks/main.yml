@@ -66,10 +66,21 @@
   notify:
   - restart apache
 
-
 - name: Synchronize django app database
   django_manage:
     command: migrate
+    app_path: "{{ papybell_app }}"
+    virtualenv: "{{ papybell_venv }}"
+    settings: "{{ papybell_django_settings }}"
+
+- name: Install gettext needed for django translations
+  apt:
+    name: gettext
+  become: yes
+
+- name: Compile tranlation files
+  django_manage:
+    command: compilemessages
     app_path: "{{ papybell_app }}"
     virtualenv: "{{ papybell_venv }}"
     settings: "{{ papybell_django_settings }}"
@@ -93,6 +104,8 @@
   - "{{ papybell_app }}"
   - "{{ papybell_venv }}"
   - "{{ papybell_logs }}"
+  notify:
+  - restart apache
 
 - name: Install mod wsgi
   apt:
