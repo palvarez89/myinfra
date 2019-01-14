@@ -1,6 +1,21 @@
 - hosts: quas
   remote_user: root
+  vars:
+    postgresql_databases:
+    - name: quassel # required; the rest are optional
+      encoding: 'UTF-8'
+    postgresql_users:
+    - name: quassel
+      password: quassel
+      db: quassel
+    postgresql_python_library: python3-psycopg2
   roles:
-  - { role: security, become: yes }
-  - { role: users, become: yes }
-  - { role: quasselcore, become: yes }
+  - role: security
+    become: yes
+  - role: users
+    become: yes
+  - role: geerlingguy.postgresql
+    become: yes
+  - role: quasselcore
+    become: yes
+# CREATE DATABASE quassel WITH OWNER quassel ENCODING 'UTF8';

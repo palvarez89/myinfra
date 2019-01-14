@@ -11,6 +11,13 @@ For paparajotes y bellotas
 
     ansible-playbook -i hosts wedsite.yml  -e ansible_user=pedroalvarez
 
+
+For Quassel
+===========
+
+    ansible-playbook -i hosts quasselcore.yml  -e ansible_user=pedroalvarez
+
+
 For OpenVPN
 ===========
 

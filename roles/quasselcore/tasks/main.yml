@@ -1,4 +1,15 @@
 ---
+- name: Add quassel ppa
+  apt_repository:
+    repo: ppa:mamarley/quassel
 - name: install quassel-core
   apt:
     name: quassel-core
+    update_cache: yes
+
+- name: install qt psql library needed
+  apt:
+    name: libqt5sql5-psql
+
+#- name: postgresql backend
+#  command: quasselcore --select-backend=PostgreSQL
