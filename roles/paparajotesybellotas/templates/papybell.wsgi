@@ -10,6 +10,7 @@ https://docs.djangoproject.com/en/1.6/howto/deployment/wsgi/
 import os
 import sys
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "{{ papybell_django_settings }}")
+os.environ.setdefault("PAPYBELL_LOGS_PATH", "{{ papybell_logs }}")
 
 
 # Activate your virtual env
