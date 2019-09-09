@@ -41,3 +41,19 @@ The client must configure the following options:
 - Port 8010
 - LZO compression
 - TCP connection
+
+VPN won't connect? Renew the CRL
+--------------------------------
+Check this is the issue by trying to connect and:
+
+    sudo journalctl -u openvpn-server@server.service  -f
+
+You will see:
+
+    VERIFY ERROR: depth=0, error=CRL has expired: CN=foobar-2019
+
+Regenerate CRL
+
+    cd /etc/easy-rsa
+    sudo ./easyrsa gen-crl
+    sudo cp /etc/easy-rsa/keys/crl.pem crl.pem /etc/openvpn/server
