@@ -12,4 +12,4 @@
     name: libqt5sql5-psql
 
 #- name: postgresql backend
-#  command: quasselcore --select-backend=PostgreSQL
+#  command: sudo -u quasselcore quasselcore --configdir=/var/lib/quassel --select-backend=PostgreSQL

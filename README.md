@@ -15,8 +15,11 @@ For paparajotes y bellotas
 For Quassel
 ===========
 
+Prepare host:
+
     ansible-playbook -i hosts quasselcore.yml  -e ansible_user=pedroalvarez
 
+Some relevant docs: <https://bugs.quassel-irc.org/projects/1/wiki/PostgreSQL>
 
 For OpenVPN
 ===========
