@@ -1,0 +1,4 @@
+#!/bin/sh
+#
+PATH=/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/sbin:/usr/local/bin
+wget --no-check-certificate -O - https://{{ GOOGLE_DOMAIN_USERNAME }}:{{ GOOGLE_DOMAIN_PASSWORD }}@domains.google.com/nic/update?hostname=cloud.alvarezpiedehierro.com >> /tmp/google_domain-cloud_alvarezpiedehierro_com.log 2>&1 &

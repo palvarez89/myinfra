@@ -11,17 +11,13 @@
 
 - name: Set cron job to update dynamic dns afraid
   template:
-    src: afraid-ddns
-    dest: /etc/cron.hourly/afraid-ddns
-    mode: 755
+    src: "{{ item }}"
+    dest: "/etc/cron.hourly/{{ item }}"
+    mode: 0755
   become: yes
-
-- name: Set cron job to update dynamic dns godaddy
-  template:
-    src: godaddy-ddns
-    dest: /etc/cron.hourly/godaddy-ddns
-    mode: 755
-  become: yes
+  with_items:
+  - afraid-ddns
+  - google-ddns
 
 - name: Install fail2ban
   become: yes
