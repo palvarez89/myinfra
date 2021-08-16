@@ -6,7 +6,7 @@
         interface enxb827ebb5d9cd
         static ip_address=192.168.1.10/24
         static routers=192.168.1.1
-        static domain_name_servers=192.168.1.1
+        static domain_name_servers=1.1.1.1 8.8.8.8
   become: yes
 
 - name: Set cron job to update dynamic dns afraid
